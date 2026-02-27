@@ -1,0 +1,13 @@
+name: data_quality
+description: Increasing missing values and corrupted features over time
+duration_seconds: 180
+parameters:
+  features:
+    - feature_0
+    - feature_1
+    - feature_2
+  missing_rate_start: 0.0
+  missing_rate_end: 0.5
+  outlier_multiplier: 10.0
+  steps: 10
+  batch_size: 100

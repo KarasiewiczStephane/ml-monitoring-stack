@@ -1,0 +1,12 @@
+name: gradual_drift
+description: Slowly shift feature distributions over time
+duration_seconds: 300
+parameters:
+  features:
+    - feature_0
+    - feature_1
+    - feature_2
+  shift_type: mean
+  shift_magnitude: 0.1
+  steps: 10
+  batch_size: 100

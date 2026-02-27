@@ -1,0 +1,11 @@
+name: sudden_drift
+description: Abrupt concept drift at a configured point
+duration_seconds: 120
+parameters:
+  features:
+    - feature_0
+    - feature_1
+  shift_magnitude: 3.0
+  change_point_fraction: 0.5
+  batch_size: 100
+  steps: 10

@@ -1,0 +1,9 @@
+name: latency_spike
+description: Simulated infrastructure latency spikes
+duration_seconds: 120
+parameters:
+  base_latency_ms: 10
+  spike_latency_ms: 500
+  spike_frequency: 0.2
+  steps: 10
+  batch_size: 50
