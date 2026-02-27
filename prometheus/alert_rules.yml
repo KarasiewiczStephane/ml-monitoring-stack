@@ -1,0 +1,56 @@
+groups:
+  - name: ml_monitoring_alerts
+    rules:
+      - alert: DataDriftDetected
+        expr: data_drift_score > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Data drift detected for feature {{ $labels.feature_name }}"
+          description: "Drift score {{ $value }} exceeds threshold 0.1 for model {{ $labels.model_name }}"
+
+      - alert: AccuracyDrop
+        expr: model_accuracy_score < 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Model accuracy dropped below 80%"
+          description: "Current accuracy for {{ $labels.model_name }}: {{ $value }}"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(model_prediction_latency_seconds_bucket[5m])) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High prediction latency detected"
+          description: "P95 latency is {{ $value }}s, exceeds 500ms SLA"
+
+      - alert: ErrorRateSpike
+        expr: model_error_rate > 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate spike detected"
+          description: "Error rate is {{ $value }} for {{ $labels.model_name }}, exceeds 5%"
+
+      - alert: LowDataQuality
+        expr: data_quality_score < 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Data quality score dropped"
+          description: "Quality score for {{ $labels.model_name }}: {{ $value }}"
+
+      - alert: HighDriftMultipleFeatures
+        expr: count(data_drift_score > 0.05) > 3
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Multiple features showing drift"
+          description: "{{ $value }} features have drift score > 0.05"
