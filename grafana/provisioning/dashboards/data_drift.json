@@ -1,0 +1,329 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "data-drift",
+    "title": "Data Drift Monitor",
+    "tags": ["ml-monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 1,
+    "refresh": "10s",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [],
+    "panels": [
+      {
+        "id": 1,
+        "title": "Number of Drifted Features",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 8, "x": 0, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 3 },
+                { "color": "red", "value": 5 }
+              ]
+            },
+            "unit": "none",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto"
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "count(data_drift_score{model_name=~\"$model_name\"} > 0.5)",
+            "legendFormat": "Drifted Features",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Overall Drift Status",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 8, "x": 8, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 0.3 },
+                { "color": "red", "value": 0.6 }
+              ]
+            },
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "decimals": 3
+          },
+          "overrides": []
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "textMode": "auto",
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "data_drift_score{model_name=~\"$model_name\"}",
+            "legendFormat": "{{model_name}}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Max Feature Drift Score",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 8, "x": 16, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 0.5 },
+                { "color": "red", "value": 0.8 }
+              ]
+            },
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "decimals": 3
+          },
+          "overrides": []
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "max(data_drift_score{model_name=~\"$model_name\", feature_name=~\"$feature_name\"})",
+            "legendFormat": "Max Drift",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Feature Drift Scores Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 10, "w": 24, "x": 0, "y": 4 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "palette-classic" },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Drift Score",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 5,
+              "gradientMode": "none",
+              "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": { "type": "linear" },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": { "group": "A", "mode": "none" },
+              "thresholdsStyle": { "mode": "dashed" }
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "red", "value": 0.5 }
+              ]
+            },
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "table", "placement": "right", "calcs": ["mean", "max", "lastNotNull"] }
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "data_drift_score{model_name=~\"$model_name\", feature_name=~\"$feature_name\"}",
+            "legendFormat": "{{feature_name}}",
+            "range": true
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Overall Drift Score Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "palette-classic" },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Overall Drift Score",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 15,
+              "gradientMode": "scheme",
+              "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": { "type": "linear" },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": { "group": "A", "mode": "none" },
+              "thresholdsStyle": { "mode": "area" }
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 0.3 },
+                { "color": "red", "value": 0.6 }
+              ]
+            },
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["mean", "lastNotNull"] }
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "data_drift_score{model_name=~\"$model_name\"}",
+            "legendFormat": "{{model_name}}",
+            "range": true
+          }
+        ]
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "enable": true,
+          "expr": "model_predictions_total{model_name=~\"$model_name\"} > 0",
+          "iconColor": "blue",
+          "name": "Model Deployments",
+          "titleFormat": "Model Deployed",
+          "tagKeys": "model_name",
+          "type": "tags"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "enable": true,
+          "expr": "data_drift_score{model_name=~\"$model_name\"} > 0",
+          "iconColor": "red",
+          "name": "Drift Alerts",
+          "titleFormat": "Drift Detected",
+          "tagKeys": "model_name,feature_name",
+          "type": "tags"
+        }
+      ]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "model_name",
+          "label": "Model Name",
+          "type": "query",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "query": "label_values(data_drift_score, model_name)",
+          "refresh": 2,
+          "sort": 1,
+          "includeAll": true,
+          "allValue": ".*",
+          "current": { "selected": true, "text": "All", "value": "$__all" },
+          "multi": false
+        },
+        {
+          "name": "feature_name",
+          "label": "Feature Name",
+          "type": "query",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "query": "label_values(data_drift_score{model_name=~\"$model_name\"}, feature_name)",
+          "refresh": 2,
+          "sort": 1,
+          "includeAll": true,
+          "allValue": ".*",
+          "current": { "selected": true, "text": "All", "value": "$__all" },
+          "multi": true
+        }
+      ]
+    },
+    "time": { "from": "now-1h", "to": "now" },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m"]
+    }
+  },
+  "overwrite": true
+}
