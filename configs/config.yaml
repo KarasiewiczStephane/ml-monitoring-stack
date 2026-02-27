@@ -1,0 +1,39 @@
+drift:
+  window_size: 1000
+  step_size: 100
+  threshold: 0.05
+  stattest: "ks"
+  features: {}
+
+performance:
+  task_type: "classification"
+  cusum_threshold: 5.0
+  cusum_drift: 0.5
+  ph_threshold: 50.0
+  ph_delta: 0.005
+  baseline_accuracy: 0.9
+
+database:
+  sqlite_path: "data/metrics.db"
+  redis_url: "redis://localhost:6379"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  model_name: "default_model"
+
+metrics:
+  collection_interval: 60
+  latency_buckets:
+    - 0.001
+    - 0.005
+    - 0.01
+    - 0.025
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1.0
+
+reference_dataset: "wine"
+reference_dir: "data/reference"
