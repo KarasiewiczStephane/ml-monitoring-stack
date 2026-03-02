@@ -61,7 +61,9 @@ class DataQualityScenario:
             # Inject outliers in remaining non-NaN values
             outlier_mask = rng.random(df.shape) < (fraction * 0.1)
             combined = outlier_mask & ~mask
-            df.values[combined] *= outlier_mult
+            arr = df.to_numpy(copy=True)
+            arr[combined] *= outlier_mult
+            df[:] = arr
 
             if callback:
                 callback(df)
