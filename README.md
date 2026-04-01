@@ -1,6 +1,6 @@
 # ML Monitoring & Observability Stack
 
-Production-grade ML model monitoring system with drift detection, performance tracking, alerting, and observability dashboards.
+> Production ML monitoring — drift detection, performance tracking, Prometheus metrics, Grafana dashboards, and automated alerting.
 
 ## Features
 
@@ -207,6 +207,11 @@ ml-monitoring-stack/
 **Tests failing locally**: Ensure all dependencies are installed with `make install`. Tests run without Docker or external services.
 
 **Dashboard not loading**: Verify `streamlit` and `plotly` are installed (`make install`). The dashboard runs independently of the API and uses synthetic demo data.
+
+
+## Author
+
+**Stéphane Karasiewicz** — [skarazdata.com](https://skarazdata.com) | [LinkedIn](https://www.linkedin.com/in/stephane-karasiewicz/)
 
 ## License
 
